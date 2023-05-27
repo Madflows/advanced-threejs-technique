@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  font-family: 'Bai Jamjuree', sans-serif;
+}
+
+html, body {
+  @apply overflow-hidden;
+}
+
+canvas {
+  @apply fixed inset-0 outline-none;
+}
