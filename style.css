@@ -13,3 +13,11 @@ html, body {
 canvas {
   @apply fixed inset-0 outline-none;
 }
+
+.loader {
+  @apply fixed inset-0 flex items-center justify-center bg-black;
+}
+
+.loader h2 {
+  @apply text-white text-sm uppercase tracking-wide font-semibold;
+}

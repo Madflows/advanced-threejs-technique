@@ -3,6 +3,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
 import * as dat from "lil-gui";
+import { gsap } from "gsap";
 
 /**
  * Base
@@ -30,13 +31,53 @@ gltfLoader.load("/models/Fox/glTF/Fox.gltf", (gltf) => {
   scene.add(gltf.scene);
 
   mixer = new THREE.AnimationMixer(gltf.scene);
-  const action = mixer.clipAction(gltf.animations[2]);
-  action.play();
+  const lookAround = mixer.clipAction(gltf.animations[0]);
+  const walk = mixer.clipAction(gltf.animations[1]);
+  const run = mixer.clipAction(gltf.animations[2]);
+  const params = {
+    gaze: () => {
+      walk.stop();
+      run.stop();
+      lookAround.play();
+    },
+    walk: () => {
+      walk.play();
+      lookAround.stop();
+      run.stop();
+    },
+    run: () => {
+      run.play();
+      walk.stop();
+      lookAround.stop();
+    },
+  };
+
+  const fox = gui.addFolder('Fox')
+
+  fox.add(params, "gaze").name('lookAround')
+  fox.add(params, "walk");
+  fox.add(params, "run");
+
+  // action.play();
 });
 
 // gltfLoader.load('/models/Duck/glTF-Draco/Duck.gltf', (gltf) => {
 //   scene.add(gltf.scene)
 // });
+let menuTL = gsap.timeline();
+
+loadingManager.onLoad = () => {
+  menuTL
+    .to(".loader h2", {
+      autoAlpha: 0,
+    })
+    .to(".loader", {
+      yPercent: -100,
+      delay: 1,
+      duration: 1,
+      ease: "power4.inOut",
+    });
+};
 
 // Canvas
 const canvas = document.querySelector("canvas.webgl");
