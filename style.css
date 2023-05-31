@@ -15,7 +15,7 @@ canvas {
 }
 
 .loader {
-  @apply fixed inset-0 flex items-center justify-center bg-black;
+  @apply fixed inset-0 flex items-start p-8 justify-end bg-black;
 }
 
 .loader h2 {
