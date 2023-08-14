@@ -7,7 +7,7 @@
 }
 
 html, body {
-  @apply overflow-hidden;
+  @apply overflow-hidden bg-gray-300;
 }
 
 canvas {
@@ -20,4 +20,8 @@ canvas {
 
 .loader h2 {
   @apply text-white text-sm uppercase tracking-wide font-semibold;
+}
+
+#gui {
+  @apply absolute left-2 top-2;
 }
