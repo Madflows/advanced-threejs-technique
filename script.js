@@ -20,6 +20,7 @@ const scene = new THREE.Scene();
  * Textures
  */
 const textureLoader = new THREE.TextureLoader();
+const flagTexture = textureLoader.load("/textures/nigeria.png");
 
 /**
  * Test mesh
@@ -38,8 +39,6 @@ geometry.setAttribute("aRandom", new THREE.BufferAttribute(randoms, 1));
 
 console.log(geometry);
 
-
-
 // Material
 const material = new THREE.RawShaderMaterial({
   vertexShader: testVertexShader,
@@ -48,16 +47,33 @@ const material = new THREE.RawShaderMaterial({
     uFrequency: {
       value: new THREE.Vector2(10, 5),
     },
+    uTime: {
+      value: 0,
+    },
+    uColor: {
+      value: new THREE.Color("orange"),
+    },
+    uTexture: {
+      value: flagTexture,
+    },
   },
-  wireframe: true
+  // wireframe: true,
 });
 
-gui.add(material.uniforms.uFrequency.value, "x").max(20).step(0.01).name("frequencyX");
-gui.add(material.uniforms.uFrequency.value, "y").max(20).step(0.01).name("frequencyY");
-
+gui
+  .add(material.uniforms.uFrequency.value, "x")
+  .max(20)
+  .step(0.5)
+  .name("frequencyX");
+gui
+  .add(material.uniforms.uFrequency.value, "y")
+  .max(20)
+  .step(0.5)
+  .name("frequencyY");
 
 // Mesh
 const mesh = new THREE.Mesh(geometry, material);
+mesh.scale.y = 2 / 3;
 scene.add(mesh);
 
 /**
@@ -115,6 +131,9 @@ const clock = new THREE.Clock();
 
 const tick = () => {
   const elapsedTime = clock.getElapsedTime();
+
+  // Update material
+  material.uniforms.uTime.value = elapsedTime;
 
   // Update controls
   controls.update();
