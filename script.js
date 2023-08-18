@@ -3,12 +3,15 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import * as dat from "lil-gui";
 import testVertexShader from "./shaders/test/vertex.glsl";
 import testFragmentShader from "./shaders/test/fragment.glsl";
+import gsap from "gsap";
 
 /**
  * Base
  */
 // Debug
 const gui = new dat.GUI();
+
+gui.close();
 
 // Canvas
 const canvas = document.querySelector("canvas.webgl");
@@ -19,8 +22,22 @@ const scene = new THREE.Scene();
 /**
  * Textures
  */
-const textureLoader = new THREE.TextureLoader();
+const loadingManager = new THREE.LoadingManager();
+const textureLoader = new THREE.TextureLoader(loadingManager);
 const flagTexture = textureLoader.load("/textures/nigeria.png");
+
+loadingManager.onLoad = () => {
+  gsap
+    .timeline({
+      delay: 2
+    })
+    .to(".ld-content", {
+      autoAlpha: 0,
+    })
+    .to(".loader", {
+      y: "-100vh",
+    });
+};
 
 /**
  * Test mesh
@@ -40,7 +57,7 @@ geometry.setAttribute("aRandom", new THREE.BufferAttribute(randoms, 1));
 console.log(geometry);
 
 // Material
-const material = new THREE.RawShaderMaterial({
+const material = new THREE.ShaderMaterial({
   vertexShader: testVertexShader,
   fragmentShader: testFragmentShader,
   uniforms: {
